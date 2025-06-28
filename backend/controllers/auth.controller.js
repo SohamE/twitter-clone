@@ -15,7 +15,7 @@ export const signup = catchAsync(async (req, res) => {
     password,
   });
   generateTokenAndSetCookie(newUser._id, res);
-  res.json({
+  res.status("201").json({
     status: "success",
     data: newUser,
   });

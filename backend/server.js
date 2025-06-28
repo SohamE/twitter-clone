@@ -7,6 +7,7 @@ dotenv.config();
 const app = express();
 // parsing body
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRouter);
 app.use(handleError);
 
