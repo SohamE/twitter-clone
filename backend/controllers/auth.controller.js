@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 import { generateTokenAndSetCookie } from "../utils/generateToken.js";
 import { promisify } from "util";
 import jwt from "jsonwebtoken";
+import { json } from "express";
 
 export const signup = catchAsync(async (req, res) => {
   if (req.body == undefined) {
@@ -38,7 +39,7 @@ export const login = catchAsync(async (req, res) => {
   generateTokenAndSetCookie(user._id, res);
   res.json({
     status: "success",
-    data: "You hit the login endpoint",
+    data: "You've logged into the application.",
   });
 });
 
@@ -47,6 +48,15 @@ export const logout = catchAsync(async (req, res) => {
   res.json({
     status: "success",
     data: "You've logged out successfully!",
+  });
+});
+
+export const getMe = catchAsync(async (req, res) => {
+  return res.status(200).json({
+    status: "success",
+    data: {
+      user: req.user,
+    },
   });
 });
 
@@ -62,7 +72,7 @@ export const protect = catchAsync(async (req, res, next) => {
     throw new Error("Invalid user token!");
   }
 
-  const user = User.findOne({ _id: tokenDet.userId });
+  const user = await User.findOne({ _id: tokenDet.userId });
   if (user == null) {
     throw new Error("User doesnot exist!");
   }
