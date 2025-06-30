@@ -17,7 +17,8 @@ export const signup = catchAsync(async (req, res) => {
     password,
   });
   generateTokenAndSetCookie(newUser._id, res);
-  res.status("201").json({
+  newUser.password = undefined;
+  res.status(201).json({
     status: "success",
     data: newUser,
   });
@@ -76,7 +77,7 @@ export const protect = catchAsync(async (req, res, next) => {
   if (user == null) {
     throw new Error("User doesnot exist!");
   }
-
+  user.password = undefined;
   req.user = user;
   next();
 });
